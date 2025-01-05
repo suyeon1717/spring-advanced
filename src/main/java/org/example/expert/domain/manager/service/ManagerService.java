@@ -2,6 +2,7 @@ package org.example.expert.domain.manager.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.example.expert.domain.common.dto.AuthUserDto;
 import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.common.service.CommonService;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 public class ManagerService {
@@ -58,7 +60,7 @@ public class ManagerService {
             todo.getUser().getId()
         );
         if (!isNullSafeEqualsTodoAndUser) {
-            throw new InvalidRequestException("담당자를 등록하려고 하는 유저가 일정을 만든 유저가 유효하지 않습니다.");
+            throw new InvalidRequestException("담당자를 등록하려고 하는 유저와 일정을 만든 유저가 유효하지 않습니다.");
         }
 
         User managerUser = commonService.findEntityById(
@@ -76,6 +78,7 @@ public class ManagerService {
 
         Manager newManagerUser = new Manager(managerUser, todo);
         Manager savedManagerUser = managerRepository.save(newManagerUser);
+        log.info(">>> {} ", newManagerUser.getId());
 
         return new ManagerSaveResponseDto(
             savedManagerUser.getId(),

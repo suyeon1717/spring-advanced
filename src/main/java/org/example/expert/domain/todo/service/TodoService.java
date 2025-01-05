@@ -1,5 +1,6 @@
 package org.example.expert.domain.todo.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.expert.client.WeatherClient;
 import org.example.expert.domain.common.dto.AuthUserDto;
 import org.example.expert.domain.common.service.CommonService;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 public class TodoService {
@@ -45,6 +47,8 @@ public class TodoService {
             user
         );
         Todo savedTodo = todoRepository.save(newTodo);
+
+        log.info(savedTodo.getContents());
 
         return new TodoSaveResponseDto(
             savedTodo.getId(),
