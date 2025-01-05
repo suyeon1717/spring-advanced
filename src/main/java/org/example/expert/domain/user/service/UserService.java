@@ -37,11 +37,14 @@ public class UserService {
             throw new InvalidRequestException("새 비밀번호는 8자 이상이어야 하고, 숫자와 대문자를 포함해야 합니다.");
         }
 
-        User user = userRepository.findById(userId)
+        User user = userRepository
+            .findById(userId)
             .orElseThrow(() -> new InvalidRequestException("User not found"));
 
-        boolean isEqualNewAndOldPassword = passwordEncoder.matches(requestDto.getNewPassword(),
-            user.getPassword());
+        boolean isEqualNewAndOldPassword = passwordEncoder.matches(
+            requestDto.getNewPassword(),
+            user.getPassword()
+        );
         if (isEqualNewAndOldPassword) {
             throw new InvalidRequestException("새 비밀번호는 기존 비밀번호와 같을 수 없습니다.");
         }

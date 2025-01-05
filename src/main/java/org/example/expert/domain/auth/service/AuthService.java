@@ -54,9 +54,9 @@ public class AuthService {
     }
 
     public SignInResponseDto signIn(SignInRequestDto requestDto) {
-        User user = userRepository.
-            findByEmail(requestDto.getEmail()).
-            orElseThrow(() -> new InvalidRequestException("가입되지 않은 유저입니다."));
+        User user = userRepository
+            .findByEmail(requestDto.getEmail())
+            .orElseThrow(() -> new InvalidRequestException("가입되지 않은 유저입니다."));
 
         boolean isPasswordMismatch = !passwordEncoder.matches(
             requestDto.getPassword(),
