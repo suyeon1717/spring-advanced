@@ -47,7 +47,7 @@ public class ManagerController {
     }
 
     @GetMapping("/todos/{todoId}/managers")
-    public ResponseEntity<List<ManagerResponseDto>> getMembers(@PathVariable long todoId) {
+    public ResponseEntity<List<ManagerResponseDto>> getManagers(@PathVariable long todoId) {
         return new ResponseEntity<>(managerService.getManagers(todoId), HttpStatus.OK);
     }
 
