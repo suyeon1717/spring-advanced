@@ -5,9 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserRoleChangeRequest {
+public class UserRoleChangeRequestDto {
 
     private String role;
+
+    public UserRoleChangeRequestDto() {
+
+    }
+
+    public UserRoleChangeRequestDto(String role) {
+        this.role = role;
+    }
 }

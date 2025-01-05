@@ -3,11 +3,11 @@ package org.example.expert.domain.auth.dto.response;
 import lombok.Getter;
 
 @Getter
-public class SignupResponse {
+public class SignInResponseDto {
 
     private final String bearerToken;
 
-    public SignupResponse(String bearerToken) {
+    public SignInResponseDto(String bearerToken) {
         this.bearerToken = bearerToken;
     }
 }

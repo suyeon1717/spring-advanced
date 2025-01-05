@@ -6,12 +6,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserChangePasswordRequest {
+public class UserChangePasswordRequestDto {
 
     @NotBlank
     private String oldPassword;
+
     @NotBlank
     private String newPassword;
+
+    public UserChangePasswordRequestDto() {
+
+    }
+
+    public UserChangePasswordRequestDto(String oldPassword, String newPassword) {
+        this.oldPassword = oldPassword;
+        this.newPassword = newPassword;
+    }
 }
