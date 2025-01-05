@@ -2,7 +2,7 @@ package org.example.expert.domain.todo.service;
 
 import org.example.expert.client.WeatherClient;
 import org.example.expert.domain.common.dto.AuthUserDto;
-import org.example.expert.domain.common.exception.InvalidRequestException;
+import org.example.expert.domain.common.service.CommonService;
 import org.example.expert.domain.todo.dto.request.TodoSaveRequestDto;
 import org.example.expert.domain.todo.dto.response.TodoResponseDto;
 import org.example.expert.domain.todo.dto.response.TodoSaveResponseDto;
@@ -22,11 +22,15 @@ public class TodoService {
 
     private final TodoRepository todoRepository;
     private final WeatherClient weatherClient;
+    private final CommonService commonService;
 
-    public TodoService(TodoRepository todoRepository, WeatherClient weatherClient) {
+    public TodoService(TodoRepository todoRepository, WeatherClient weatherClient,
+        CommonService commonService) {
         this.todoRepository = todoRepository;
         this.weatherClient = weatherClient;
+        this.commonService = commonService;
     }
+
 
     @Transactional
     public TodoSaveResponseDto saveTodo(AuthUserDto authUser, TodoSaveRequestDto requestDto) {
@@ -68,9 +72,11 @@ public class TodoService {
     }
 
     public TodoResponseDto getTodo(long todoId) {
-        Todo todo = todoRepository
-            .findById(todoId)
-            .orElseThrow(() -> new InvalidRequestException("Todo not found"));
+        Todo todo = commonService.findEntityById(
+            todoRepository,
+            todoId,
+            "Todo not found"
+        );
 
         User user = todo.getUser();
 

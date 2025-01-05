@@ -23,14 +23,13 @@ public class AuthService {
     private final JwtUtil jwtUtil;
 
     public AuthService(
-        UserRepository userRepository,
-        PasswordEncoder passwordEncoder,
-        JwtUtil jwtUtil
+        UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
     }
+
 
     @Transactional
     public SignUpResponseDto signUp(SignUpRequestDto requestDto) {
@@ -54,6 +53,7 @@ public class AuthService {
     }
 
     public SignInResponseDto signIn(SignInRequestDto requestDto) {
+
         User user = userRepository
             .findByEmail(requestDto.getEmail())
             .orElseThrow(() -> new InvalidRequestException("가입되지 않은 유저입니다."));

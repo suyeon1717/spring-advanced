@@ -132,8 +132,8 @@ public class ManagerService {
             "Manager not found"
         );
 
-        boolean isManegerUser = ObjectUtils.nullSafeEquals(todo.getId(), manager.getTodo().getId());
-        if (!isManegerUser) {
+        boolean isManagerUser = ObjectUtils.nullSafeEquals(todo.getId(), manager.getTodo().getId());
+        if (!isManagerUser) {
             throw new InvalidRequestException("해당 일정에 등록된 담당자가 아닙니다.");
         }
 

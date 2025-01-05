@@ -18,8 +18,10 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final CommonService commonService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
-        CommonService commonService) {
+    public UserService(
+        UserRepository userRepository, PasswordEncoder passwordEncoder,
+        CommonService commonService
+    ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.commonService = commonService;
@@ -43,9 +45,11 @@ public class UserService {
             throw new InvalidRequestException("새 비밀번호는 8자 이상이어야 하고, 숫자와 대문자를 포함해야 합니다.");
         }
 
-        User user = userRepository
-            .findById(userId)
-            .orElseThrow(() -> new InvalidRequestException("User not found"));
+        User user = commonService.findEntityById(
+            userRepository,
+            userId,
+            "User not found"
+        );
 
         boolean isEqualNewAndOldPassword = passwordEncoder.matches(
             requestDto.getNewPassword(),
