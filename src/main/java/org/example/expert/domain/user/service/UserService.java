@@ -2,6 +2,7 @@ package org.example.expert.domain.user.service;
 
 import org.example.expert.config.PasswordEncoder;
 import org.example.expert.domain.common.exception.InvalidRequestException;
+import org.example.expert.domain.common.service.CommonService;
 import org.example.expert.domain.user.dto.request.UserChangePasswordRequestDto;
 import org.example.expert.domain.user.dto.response.UserResponseDto;
 import org.example.expert.domain.user.entity.User;
@@ -15,16 +16,21 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CommonService commonService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+        CommonService commonService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.commonService = commonService;
     }
 
     public UserResponseDto getUser(long userId) {
-        User user = userRepository
-            .findById(userId)
-            .orElseThrow(() -> new InvalidRequestException("User not found"));
+        User user = commonService.findEntityById(
+            userRepository,
+            userId,
+            "User not found"
+        );
         return new UserResponseDto(user.getId(), user.getEmail());
     }
 

@@ -2,9 +2,9 @@ package org.example.expert.domain.manager.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import org.example.expert.domain.common.dto.AuthUserDto;
 import org.example.expert.domain.common.exception.InvalidRequestException;
+import org.example.expert.domain.common.service.CommonService;
 import org.example.expert.domain.manager.dto.request.ManagerSaveRequestDto;
 import org.example.expert.domain.manager.dto.response.ManagerResponseDto;
 import org.example.expert.domain.manager.dto.response.ManagerSaveResponseDto;
@@ -20,13 +20,23 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ManagerService {
 
     private final ManagerRepository managerRepository;
     private final UserRepository userRepository;
     private final TodoRepository todoRepository;
+    private final CommonService commonService;
+
+    public ManagerService(
+        ManagerRepository managerRepository, UserRepository userRepository,
+        TodoRepository todoRepository, CommonService commonService
+    ) {
+        this.managerRepository = managerRepository;
+        this.userRepository = userRepository;
+        this.todoRepository = todoRepository;
+        this.commonService = commonService;
+    }
 
     @Transactional
     public ManagerSaveResponseDto saveManager(
@@ -34,9 +44,11 @@ public class ManagerService {
         long todoId,
         ManagerSaveRequestDto requestDto
     ) {
-        Todo todo = todoRepository
-            .findById(todoId)
-            .orElseThrow(() -> new InvalidRequestException("Todo not found"));
+        Todo todo = commonService.findEntityById(
+            todoRepository,
+            todoId,
+            "Todo not found"
+        );
 
         // 일정을 만든 유저
         User user = User.fromAuthUser(authUser);
@@ -49,9 +61,11 @@ public class ManagerService {
             throw new InvalidRequestException("담당자를 등록하려고 하는 유저가 일정을 만든 유저가 유효하지 않습니다.");
         }
 
-        User managerUser = userRepository
-            .findById(requestDto.getManagerUserId())
-            .orElseThrow(() -> new InvalidRequestException("등록하려고 하는 담당자 유저가 존재하지 않습니다."));
+        User managerUser = commonService.findEntityById(
+            userRepository,
+            requestDto.getManagerUserId(),
+            "등록하려고 하는 담당자 유저가 존재하지 않습니다."
+        );
 
         boolean isNullSafeEqualsManagerAndUser = ObjectUtils.nullSafeEquals(
             user.getId(),
@@ -70,9 +84,11 @@ public class ManagerService {
     }
 
     public List<ManagerResponseDto> getManagers(long todoId) {
-        Todo todo = todoRepository
-            .findById(todoId)
-            .orElseThrow(() -> new InvalidRequestException("Todo not found"));
+        Todo todo = commonService.findEntityById(
+            todoRepository,
+            todoId,
+            "Todo not found"
+        );
 
         List<Manager> managerList = new ArrayList<>();
         managerList = managerRepository.findAllByTodoId(todo.getId());
@@ -90,13 +106,17 @@ public class ManagerService {
 
     @Transactional
     public void deleteManager(long userId, long todoId, long managerId) {
-        User user = userRepository
-            .findById(userId)
-            .orElseThrow(() -> new InvalidRequestException("User not found"));
+        User user = commonService.findEntityById(
+            userRepository,
+            userId,
+            "User not found"
+        );
 
-        Todo todo = todoRepository
-            .findById(todoId)
-            .orElseThrow(() -> new InvalidRequestException("Todo not found"));
+        Todo todo = commonService.findEntityById(
+            todoRepository,
+            todoId,
+            "Todo not found"
+        );
 
         boolean isTodoUser = !(todo.getUser() == null || !ObjectUtils.nullSafeEquals(
             user.getId(),
@@ -106,9 +126,11 @@ public class ManagerService {
             throw new InvalidRequestException("해당 일정을 만든 유저가 유효하지 않습니다.");
         }
 
-        Manager manager = managerRepository
-            .findById(managerId)
-            .orElseThrow(() -> new InvalidRequestException("Manager not found"));
+        Manager manager = commonService.findEntityById(
+            managerRepository,
+            managerId,
+            "Manager not found"
+        );
 
         boolean isManegerUser = ObjectUtils.nullSafeEquals(todo.getId(), manager.getTodo().getId());
         if (!isManegerUser) {
