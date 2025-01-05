@@ -7,8 +7,8 @@ import org.example.expert.config.JwtUtil;
 import org.example.expert.domain.common.annotation.Auth;
 import org.example.expert.domain.common.dto.AuthUserDto;
 import org.example.expert.domain.manager.dto.request.ManagerSaveRequestDto;
-import org.example.expert.domain.manager.dto.response.ManagerResponse;
-import org.example.expert.domain.manager.dto.response.ManagerSaveResponse;
+import org.example.expert.domain.manager.dto.response.ManagerResponseDto;
+import org.example.expert.domain.manager.dto.response.ManagerSaveResponseDto;
 import org.example.expert.domain.manager.service.ManagerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +32,7 @@ public class ManagerController {
     }
 
     @PostMapping("/todos/{todoId}/managers")
-    public ResponseEntity<ManagerSaveResponse> saveManager(
+    public ResponseEntity<ManagerSaveResponseDto> saveManager(
         @Auth AuthUserDto authUser,
         @PathVariable long todoId,
         @Valid @RequestBody ManagerSaveRequestDto requestDto
@@ -47,7 +47,7 @@ public class ManagerController {
     }
 
     @GetMapping("/todos/{todoId}/managers")
-    public ResponseEntity<List<ManagerResponse>> getMembers(@PathVariable long todoId) {
+    public ResponseEntity<List<ManagerResponseDto>> getMembers(@PathVariable long todoId) {
         return new ResponseEntity<>(managerService.getManagers(todoId), HttpStatus.OK);
     }
 

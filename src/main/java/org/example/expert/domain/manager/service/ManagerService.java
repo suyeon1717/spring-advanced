@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.expert.domain.common.dto.AuthUserDto;
 import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.manager.dto.request.ManagerSaveRequestDto;
-import org.example.expert.domain.manager.dto.response.ManagerResponse;
-import org.example.expert.domain.manager.dto.response.ManagerSaveResponse;
+import org.example.expert.domain.manager.dto.response.ManagerResponseDto;
+import org.example.expert.domain.manager.dto.response.ManagerSaveResponseDto;
 import org.example.expert.domain.manager.entity.Manager;
 import org.example.expert.domain.manager.repository.ManagerRepository;
 import org.example.expert.domain.todo.entity.Todo;
@@ -29,7 +29,7 @@ public class ManagerService {
     private final TodoRepository todoRepository;
 
     @Transactional
-    public ManagerSaveResponse saveManager(
+    public ManagerSaveResponseDto saveManager(
         AuthUserDto authUser,
         long todoId,
         ManagerSaveRequestDto requestDto
@@ -53,7 +53,8 @@ public class ManagerService {
             .findById(requestDto.getManagerUserId())
             .orElseThrow(() -> new InvalidRequestException("등록하려고 하는 담당자 유저가 존재하지 않습니다."));
 
-        boolean isNullSafeEqualsManagerAndUser = ObjectUtils.nullSafeEquals(user.getId(),
+        boolean isNullSafeEqualsManagerAndUser = ObjectUtils.nullSafeEquals(
+            user.getId(),
             managerUser.getId());
         if (isNullSafeEqualsManagerAndUser) {
             throw new InvalidRequestException("일정 작성자는 본인을 담당자로 등록할 수 없습니다.");
@@ -62,28 +63,29 @@ public class ManagerService {
         Manager newManagerUser = new Manager(managerUser, todo);
         Manager savedManagerUser = managerRepository.save(newManagerUser);
 
-        return new ManagerSaveResponse(
+        return new ManagerSaveResponseDto(
             savedManagerUser.getId(),
             new UserResponseDto(managerUser.getId(), managerUser.getEmail())
         );
     }
 
-    public List<ManagerResponse> getManagers(long todoId) {
+    public List<ManagerResponseDto> getManagers(long todoId) {
         Todo todo = todoRepository
             .findById(todoId)
             .orElseThrow(() -> new InvalidRequestException("Todo not found"));
 
-        List<Manager> managerList = managerRepository.findAllByTodoId(todo.getId());
+        List<Manager> managerList = new ArrayList<>();
+        managerList = managerRepository.findAllByTodoId(todo.getId());
 
-        List<ManagerResponse> dtoList = new ArrayList<>();
+        List<ManagerResponseDto> managerResponseDtoList = new ArrayList<>();
         for (Manager manager : managerList) {
             User user = manager.getUser();
-            dtoList.add(new ManagerResponse(
+            managerResponseDtoList.add(new ManagerResponseDto(
                 manager.getId(),
                 new UserResponseDto(user.getId(), user.getEmail())
             ));
         }
-        return dtoList;
+        return managerResponseDtoList;
     }
 
     @Transactional

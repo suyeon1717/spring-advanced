@@ -11,8 +11,8 @@ import java.util.Optional;
 import org.example.expert.domain.common.dto.AuthUserDto;
 import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.manager.dto.request.ManagerSaveRequestDto;
-import org.example.expert.domain.manager.dto.response.ManagerResponse;
-import org.example.expert.domain.manager.dto.response.ManagerSaveResponse;
+import org.example.expert.domain.manager.dto.response.ManagerResponseDto;
+import org.example.expert.domain.manager.dto.response.ManagerSaveResponseDto;
 import org.example.expert.domain.manager.entity.Manager;
 import org.example.expert.domain.manager.repository.ManagerRepository;
 import org.example.expert.domain.todo.entity.Todo;
@@ -88,7 +88,7 @@ class ManagerServiceTest {
         given(managerRepository.findAllByTodoId(todoId)).willReturn(managerList);
 
         // when
-        List<ManagerResponse> managerResponses = managerService.getManagers(todoId);
+        List<ManagerResponseDto> managerResponses = managerService.getManagers(todoId);
 
         // then
         assertEquals(1, managerResponses.size());
@@ -120,7 +120,7 @@ class ManagerServiceTest {
             invocation -> invocation.getArgument(0));
 
         // when
-        ManagerSaveResponse response = managerService.saveManager(authUser, todoId,
+        ManagerSaveResponseDto response = managerService.saveManager(authUser, todoId,
             managerSaveRequest);
 
         // then

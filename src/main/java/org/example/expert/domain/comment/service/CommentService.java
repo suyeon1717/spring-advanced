@@ -59,7 +59,7 @@ public class CommentService {
         List<Comment> commentList = new ArrayList<>();
         commentList = commentRepository.findAllByTodoId(todoId);
 
-        List<CommentResponseDto> dtoList = new ArrayList<>();
+        List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
         for (Comment comment : commentList) {
             User user = comment.getUser();
             CommentResponseDto responseDto = new CommentResponseDto(
@@ -67,8 +67,8 @@ public class CommentService {
                 comment.getContents(),
                 new UserResponseDto(user.getId(), user.getEmail())
             );
-            dtoList.add(responseDto);
+            commentResponseDtoList.add(responseDto);
         }
-        return dtoList;
+        return commentResponseDtoList;
     }
 }
