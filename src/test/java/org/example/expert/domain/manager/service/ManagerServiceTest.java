@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import org.example.expert.domain.common.dto.AuthUserDto;
 import org.example.expert.domain.common.exception.InvalidRequestException;
+import org.example.expert.domain.common.service.CommonService;
 import org.example.expert.domain.manager.dto.request.ManagerSaveRequestDto;
 import org.example.expert.domain.manager.dto.response.ManagerResponseDto;
 import org.example.expert.domain.manager.dto.response.ManagerSaveResponseDto;
@@ -38,9 +39,11 @@ class ManagerServiceTest {
     private TodoRepository todoRepository;
     @InjectMocks
     private ManagerService managerService;
+    @Mock
+    private CommonService commonService;
 
     @Test
-    public void manager_목록_조회_시_Todo가_없다면_NPE_에러를_던진다() {
+    public void manager_목록_조회_시_Todo가_없다면_InvalidRequestException_에러를_던진다() {
         // given
         long todoId = 1L;
         given(todoRepository.findById(todoId)).willReturn(Optional.empty());
@@ -48,7 +51,7 @@ class ManagerServiceTest {
         // when & then
         InvalidRequestException exception = assertThrows(InvalidRequestException.class,
             () -> managerService.getManagers(todoId));
-        assertEquals("Manager not found", exception.getMessage());
+        assertEquals("Todo not found", exception.getMessage());
     }
 
     @Test

@@ -87,11 +87,16 @@ public class ManagerService {
     }
 
     public List<ManagerResponseDto> getManagers(long todoId) {
-        Todo todo = commonService.findEntityById(
-            todoRepository,
-            todoId,
-            "Todo not found"
-        );
+        Todo todo = todoRepository
+            .findById(todoId)
+            .orElseThrow(() -> new InvalidRequestException("Todo not found"));
+
+        // lv 5-2 수행하기 위해 주석처리 하고 위의 코드를 살림
+//        Todo todo = commonService.findEntityById(
+//            todoRepository,
+//            todoId,
+//            "Todo not found"
+//        );
 
         List<Manager> managerList = new ArrayList<>();
         managerList = managerRepository.findAllByTodoId(todo.getId());
