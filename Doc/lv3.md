@@ -1,5 +1,6 @@
-### 1️⃣ Early Return
-#### - 조건에 맞지 않는 경우 즉시 리턴하여, 불필요한 로직의 실행을 방지하고 성능을 향상시킨다.
+#  Lv 3. 추가 기능 개선
+## 1️⃣ Early Return
+### 조건에 맞지 않는 경우 즉시 리턴하여, 불필요한 로직의 실행을 방지하고 성능을 향상시킨다.
 #### - 수정 전
 ```java
 String encodedPassword = passwordEncoder.encode(signupRequest.getPassword());
@@ -21,7 +22,7 @@ String encodedPassword = passwordEncoder.encode(signupRequest.getPassword());
 UserRole userRole = UserRole.of(signupRequest.getUserRole());
 ```
 
-### 2️⃣ 불필요한 if-else 피하기
+## 2️⃣ 불필요한 if-else 피하기
 #### - 수정 전
 ```java
 WeatherDto[] weatherArray = responseEntity.getBody();
@@ -45,13 +46,13 @@ if (weatherArray == null || weatherArray.length == 0) {
 }
 ```
 
-### 3️⃣ 코드 클린업
+## 3️⃣ 코드 클린업
 #### - 불필요한 주석 제거, 코드 포맷팅, 일관된 네이밍 컨벤션 적용
 #### - 팀 내에서 정한 코드 컨벤션 규칙 적용
 #### - 기본적으로 google 코드 컨벤션 적용
 #### - lv3 브랜치 참고
 
-### 4️⃣ 중복 코드 제거
+## 4️⃣ 중복 코드 제거
 #### - 중복 코드 식별
 #### - 메서드로 추출 ( 단순 private 메소드로의 추출 x)
 #### - 개인적으로 제일 어려웠다.. 😂

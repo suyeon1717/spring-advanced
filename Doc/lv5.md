@@ -1,3 +1,4 @@
+# Lv 5. 테스트코드 & API 로깅
 ## 1️⃣ 테스트 연습
 ### 오류 원인 
 👉🏻 rawPassword와 encodedPassword 순서가 잘못되었다.
@@ -25,7 +26,7 @@ class PasswordEncoderTest {
 }
 ```
 
-## 2️⃣ -1. 테스트 연습2 1번 케이스
+## 2️⃣ - 1️⃣ 테스트 연습2 1번 케이스
 ### 기존 테스트 코드
 ```java
 @Test
@@ -79,7 +80,7 @@ given(todoRepository.findById(todoId)).willReturn(Optional.empty());
 👉🏻 `manager_목록_조회_시_Todo가_없다면_InvalidRequestException_에러를_던진다()`
 
 
-## 2️⃣ -2. 테스트 연습2 2번 케이스
+## 2️⃣ - 2️⃣ 테스트 연습2 2번 케이스
 ### 기존 테스트 코드
 ```java
 @Test
@@ -131,7 +132,7 @@ AuthUserDto authUser = new AuthUserDto(1L, "email", UserRole.USER);
 }
 ```
 
-## 2️⃣ -3. 테스트 연습2 3번 케이스
+## 2️⃣ - 3️⃣ 테스트 연습2 3번 케이스
 ### 기존 테스트 코드
 ```java
 void todo의_user가_null인_경우_예외가_발생한다() {

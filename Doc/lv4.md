@@ -1,8 +1,9 @@
-## N+1 문제 개선하기
+# Lv 4. N+1 문제 개선하기
 ### ❔ N+1 문제
 어떠한 객체를 조회(Querying) 할 시에 발생하는 문제로, 엔티티 컬렉션이나 연관된 엔티티를 Lazy Loading 방식으로 가져올 때 반복적으로 쿼리가 실행되는 것을 의미
 
 ### 👀 N+1 문제 예시
+![img1.png](img1.png)![img2.png](img2.png)
 ```java
 // TodoService
 
