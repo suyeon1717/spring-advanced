@@ -46,11 +46,15 @@ public class ManagerService {
         long todoId,
         ManagerSaveRequestDto requestDto
     ) {
-        Todo todo = commonService.findEntityById(
-            todoRepository,
-            todoId,
-            "Todo not found"
-        );
+        Todo todo = todoRepository
+            .findById(todoId)
+            .orElseThrow(() -> new InvalidRequestException("Todo not found"));
+
+
+        // lv 5-2 3번 케이스에 의해 추가, null 에러 처리
+        if (todo.getUser() == null) {
+            throw new InvalidRequestException("Todo's User not found");
+        }
 
         // 일정을 만든 유저
         User user = User.fromAuthUser(authUser);
