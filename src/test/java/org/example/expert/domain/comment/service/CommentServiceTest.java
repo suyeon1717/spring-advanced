@@ -5,6 +5,7 @@ import org.example.expert.domain.comment.dto.response.CommentSaveResponseDto;
 import org.example.expert.domain.comment.entity.Comment;
 import org.example.expert.domain.comment.repository.CommentRepository;
 import org.example.expert.domain.common.dto.AuthUserDto;
+import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.common.exception.ServerException;
 import org.example.expert.domain.todo.entity.Todo;
 import org.example.expert.domain.todo.repository.TodoRepository;
@@ -26,48 +27,48 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class CommentServiceTest {
 
-  @Mock
-  private CommentRepository commentRepository;
-  @Mock
-  private TodoRepository todoRepository;
-  @InjectMocks
-  private CommentService commentService;
+    @Mock
+    private CommentRepository commentRepository;
+    @Mock
+    private TodoRepository todoRepository;
+    @InjectMocks
+    private CommentService commentService;
 
-  @Test
-  public void comment_등록_중_할일을_찾지_못해_에러가_발생한다() {
-    // given
-    long todoId = 1;
-    CommentSaveRequestDto request = new CommentSaveRequestDto("contents");
-    AuthUserDto authUser = new AuthUserDto(1L, "email", UserRole.USER);
+    @Test
+    public void comment_등록_중_할일을_찾지_못해_에러가_발생한다() {
+        // given
+        long todoId = 1;
+        CommentSaveRequestDto request = new CommentSaveRequestDto("contents");
+        AuthUserDto authUser = new AuthUserDto(1L, "email", UserRole.USER);
 
-    given(todoRepository.findById(anyLong())).willReturn(Optional.empty());
+        given(todoRepository.findById(anyLong())).willReturn(Optional.empty());
 
-    // when
-    ServerException exception = assertThrows(ServerException.class, () -> {
-      commentService.saveComment(authUser, todoId, request);
-    });
+        // when
+        InvalidRequestException exception = assertThrows(InvalidRequestException.class, () -> {
+            commentService.saveComment(authUser, todoId, request);
+        });
 
-    // then
-    assertEquals("Todo not found", exception.getMessage());
-  }
+        // then
+        assertEquals("Todo not found", exception.getMessage());
+    }
 
-  @Test
-  public void comment를_정상적으로_등록한다() {
-    // given
-    long todoId = 1;
-    CommentSaveRequestDto request = new CommentSaveRequestDto("contents");
-    AuthUserDto authUser = new AuthUserDto(1L, "email", UserRole.USER);
-    User user = User.fromAuthUser(authUser);
-    Todo todo = new Todo("title", "title", "contents", user);
-    Comment comment = new Comment(request.getContents(), user, todo);
+    @Test
+    public void comment를_정상적으로_등록한다() {
+        // given
+        long todoId = 1;
+        CommentSaveRequestDto request = new CommentSaveRequestDto("contents");
+        AuthUserDto authUser = new AuthUserDto(1L, "email", UserRole.USER);
+        User user = User.fromAuthUser(authUser);
+        Todo todo = new Todo("title", "title", "contents", user);
+        Comment comment = new Comment(request.getContents(), user, todo);
 
-    given(todoRepository.findById(anyLong())).willReturn(Optional.of(todo));
-    given(commentRepository.save(any())).willReturn(comment);
+        given(todoRepository.findById(anyLong())).willReturn(Optional.of(todo));
+        given(commentRepository.save(any())).willReturn(comment);
 
-    // when
-    CommentSaveResponseDto result = commentService.saveComment(authUser, todoId, request);
+        // when
+        CommentSaveResponseDto result = commentService.saveComment(authUser, todoId, request);
 
-    // then
-    assertNotNull(result);
-  }
+        // then
+        assertNotNull(result);
+    }
 }

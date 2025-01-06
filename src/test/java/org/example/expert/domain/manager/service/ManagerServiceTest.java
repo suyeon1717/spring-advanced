@@ -39,8 +39,6 @@ class ManagerServiceTest {
     private TodoRepository todoRepository;
     @InjectMocks
     private ManagerService managerService;
-    @Mock
-    private CommonService commonService;
 
     @Test
     public void manager_목록_조회_시_Todo가_없다면_InvalidRequestException_에러를_던진다() {
